@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="hr-HR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Uvjeti korištenja | MetaSlim Hrvatska</title>
+<meta name="robots" content="noindex, follow" />
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; max-width: 760px; margin: 0 auto; padding: 30px 20px; line-height: 1.6; color: #333; }
+  h1 { font-size: 26px; margin-bottom: 10px; }
+  h2 { font-size: 19px; margin-top: 30px; }
+  a.back { display: inline-block; margin-bottom: 20px; color: #555; text-decoration: none; }
+  a.back:hover { text-decoration: underline; }
+  footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; font-size: 13px; text-align: center; color: #888; }
+  footer a { color: #555; margin: 0 8px; text-decoration: underline; }
+</style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; Povratak na početnu</a>
+  <h1>Uvjeti korištenja</h1>
+  <p>Korištenjem ove web stranice prihvaćate sljedeće uvjete.</p>
+
+  <h2>1. O proizvodu</h2>
+  <p>MetaSlim je dodatak prehrani namijenjen osobama koje prate ketogenu prehranu. Proizvod nije lijek i nije namijenjen dijagnosticiranju, liječenju ili sprječavanju bolesti.</p>
+
+  <h2>2. Narudžba</h2>
+  <p>Narudžba se obavlja putem obrasca na ovoj stranici. Naš tim vas kontaktira telefonom radi potvrde podataka i adrese isporuke.</p>
+
+  <h2>3. Cijena i plaćanje</h2>
+  <p>Trenutna cijena s popustom je 39€ umjesto 78€ (50% popusta). Plaćanje se vrši isključivo pri preuzimanju paketa (plaćanje pouzećem).</p>
+
+  <h2>4. Odgovornost korisnika</h2>
+  <p>Korisnik je odgovoran za točnost podataka unesenih u obrazac za narudžbu, uključujući ime i broj telefona.</p>
+
+  <h2>5. Ograničenje odgovornosti</h2>
+  <p>MetaSlim Hrvatska ne odgovara za neizravne ili posljedične štete povezane s korištenjem proizvoda izvan preporučenih uputa.</p>
+
+  <h2>6. Izmjene uvjeta</h2>
+  <p>Pridržavamo pravo izmjene ovih uvjeta u bilo kojem trenutku. Izmjene stupaju na snagu objavom na ovoj stranici.</p>
+
+  <h2>7. Kontakt</h2>
+  <p>Za pitanja vezana uz uvjete korištenja, kontaktirajte naš tim za podršku putem telefona naveden tijekom procesa narudžbe.</p>
+
+  <footer>
+    <nav>
+      <a href="politika-privatnosti.html">Politika privatnosti</a>
+      <a href="uvjeti-koristenja.html">Uvjeti korištenja</a>
+      <a href="dostava-i-povrat.html">Dostava i povrat</a>
+      <a href="placanje-pouzecem.html">Plaćanje pouzećem</a>
+    </nav>
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> MetaSlim Hrvatska. Sva prava pridržana.</p>
+  </footer>
+</body>
+</html>
