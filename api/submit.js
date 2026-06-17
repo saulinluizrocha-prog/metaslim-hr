@@ -1,5 +1,5 @@
-const https = require('https');
 const crypto = require('crypto');
+const https = require('https');
 
 const CONFIG = {
     api_key: 'c66289394c2a6e8515c8e8b382fba719',
@@ -12,18 +12,18 @@ function checkSum(jsonData) {
     return crypto.createHash('sha1').update(jsonData + CONFIG.api_key).digest('hex');
 }
 
-function postRequest(url, body) {
+function httpsPost(url, body) {
     return new Promise((resolve, reject) => {
         const urlObj = new URL(url);
         const options = {
             hostname: urlObj.hostname,
+            port: 443,
             path: urlObj.pathname + urlObj.search,
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(body),
             },
-            rejectUnauthorized: false,
         };
 
         const req = https.request(options, (res) => {
@@ -33,27 +33,35 @@ function postRequest(url, body) {
         });
 
         req.on('error', reject);
+        req.setTimeout(15000, () => {
+            req.destroy(new Error('Request timeout'));
+        });
         req.write(body);
         req.end();
     });
 }
 
-function parseBody(req) {
+function getBody(req) {
+    // If Vercel already parsed the body, use it
+    if (req.body && typeof req.body === 'object') {
+        return Promise.resolve(req.body);
+    }
+    // Otherwise parse it manually
     return new Promise((resolve, reject) => {
-        let body = '';
-        req.on('data', chunk => { body += chunk.toString(); });
+        let raw = '';
+        req.on('data', (chunk) => { raw += chunk.toString(); });
         req.on('end', () => {
             try {
-                // Try JSON first
-                resolve(JSON.parse(body));
-            } catch {
-                // Parse URL-encoded form data
-                const params = new URLSearchParams(body);
-                const obj = {};
-                for (const [key, value] of params.entries()) {
-                    obj[key] = value;
+                if (raw.startsWith('{')) {
+                    resolve(JSON.parse(raw));
+                } else {
+                    const params = new URLSearchParams(raw);
+                    const obj = {};
+                    for (const [k, v] of params.entries()) obj[k] = v;
+                    resolve(obj);
                 }
-                resolve(obj);
+            } catch {
+                resolve({});
             }
         });
         req.on('error', reject);
@@ -61,78 +69,89 @@ function parseBody(req) {
 }
 
 module.exports = async function handler(req, res) {
-    // Only accept POST
+    // Handle CORS preflight
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
     if (req.method !== 'POST') {
-        res.status(405).send('Method Not Allowed');
+        res.status(405).end('Method Not Allowed');
         return;
     }
 
     let postData;
     try {
-        postData = await parseBody(req);
+        postData = await getBody(req);
     } catch (e) {
-        res.status(400).send('Bad Request');
-        return;
+        console.error('Body parse error:', e);
+        postData = {};
     }
 
-    const { name, phone } = postData;
+    const queryData = req.query || {};
+    const name = (postData.name || '').trim();
+    const phone = (postData.phone || '').trim();
 
     if (!name || !phone) {
         const referer = req.headers['referer'] || '/';
-        res.redirect(302, referer);
+        res.writeHead(302, { Location: referer });
+        res.end();
         return;
     }
 
-    // Get query params (UTM, sub_id, etc.)
-    const queryParams = req.query || {};
-
     const leadData = {
-        name: name.trim(),
-        phone: phone.trim(),
+        name,
+        phone,
         offer_id: CONFIG.offer_id,
         country: postData.country || 'HR',
     };
 
     const optionalFields = [
         'tz', 'address', 'region', 'city', 'zip', 'stream_id', 'count',
-        'email', 'user_comment',
+        'email', 'user_comment', 'referer', 'user_agent', 'ip',
         'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
         'sub_id', 'sub_id_1', 'sub_id_2', 'sub_id_3', 'sub_id_4',
-        'referer', 'user_agent', 'ip',
     ];
 
     for (const field of optionalFields) {
-        if (postData[field]) leadData[field] = postData[field];
-        else if (queryParams[field]) leadData[field] = queryParams[field];
+        const val = postData[field] || queryData[field];
+        if (val) leadData[field] = val;
     }
 
     if (!leadData.referer) {
-        leadData.referer = queryParams.referer || req.headers['referer'] || null;
+        leadData.referer = queryData.referer || req.headers['referer'] || null;
     }
 
-    const payload = {
-        user_id: CONFIG.user_id,
-        data: leadData,
-    };
-
+    const payload = { user_id: CONFIG.user_id, data: leadData };
     const jsonPayload = JSON.stringify(payload);
     const checksum = checkSum(jsonPayload);
     const apiUrl = `${CONFIG.api_domain}/api/lead/create?check_sum=${checksum}`;
 
     try {
-        const response = await postRequest(apiUrl, jsonPayload);
-        const body = JSON.parse(response.body);
+        const response = await httpsPost(apiUrl, jsonPayload);
+        console.log('API response status:', response.statusCode);
+        console.log('API response body:', response.body);
 
-        if (body.status === 'ok') {
-            const leadId = body.data?.id || '';
-            res.redirect(302, `/success.html?id=${leadId}`);
-        } else {
-            console.error('API error:', body.error);
-            res.redirect(302, `/success.html`);
+        let redirectUrl = '/success.html';
+
+        if (response.statusCode === 200) {
+            try {
+                const parsed = JSON.parse(response.body);
+                if (parsed.status === 'ok' && parsed.data?.id) {
+                    redirectUrl = `/success.html?id=${parsed.data.id}`;
+                }
+            } catch { /* ignore json parse error */ }
         }
+
+        res.writeHead(302, { Location: redirectUrl });
+        res.end();
     } catch (e) {
-        console.error('Request failed:', e.message);
-        // Redirect to success anyway so user doesn't see error
-        res.redirect(302, `/success.html`);
+        console.error('API request failed:', e.message);
+        // Still redirect to success to not leave user on error page
+        res.writeHead(302, { Location: '/success.html' });
+        res.end();
     }
 };
