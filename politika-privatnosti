@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="hr-HR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Politika privatnosti | MetaSlim Hrvatska</title>
+<meta name="robots" content="noindex, follow" />
+<style>
+  body { font-family: Arial, Helvetica, sans-serif; max-width: 760px; margin: 0 auto; padding: 30px 20px; line-height: 1.6; color: #333; }
+  h1 { font-size: 26px; margin-bottom: 10px; }
+  h2 { font-size: 19px; margin-top: 30px; }
+  a.back { display: inline-block; margin-bottom: 20px; color: #555; text-decoration: none; }
+  a.back:hover { text-decoration: underline; }
+  footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; font-size: 13px; text-align: center; color: #888; }
+  footer a { color: #555; margin: 0 8px; text-decoration: underline; }
+</style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; Povratak na početnu</a>
+  <h1>Politika privatnosti</h1>
+  <p>Ova politika privatnosti objašnjava kako MetaSlim Hrvatska prikuplja, koristi i štiti osobne podatke posjetitelja ove web stranice.</p>
+
+  <h2>1. Podaci koje prikupljamo</h2>
+  <p>Prikupljamo ime i broj telefona koje unesete u obrazac za narudžbu, isključivo u svrhu obrade i isporuke vaše narudžbe.</p>
+
+  <h2>2. Svrha obrade podataka</h2>
+  <p>Vaši podaci se koriste za potvrdu narudžbe putem telefonskog poziva, organizaciju dostave i komunikaciju vezanu uz vašu kupnju.</p>
+
+  <h2>3. Čuvanje i sigurnost podataka</h2>
+  <p>Poduzimamo razumne tehničke i organizacijske mjere za zaštitu vaših podataka od neovlaštenog pristupa, gubitka ili zlouporabe.</p>
+
+  <h2>4. Podjela podataka s trećim stranama</h2>
+  <p>Podaci se dijele isključivo s dostavnom službom u mjeri potrebnoj za isporuku narudžbe. Ne prodajemo niti iznajmljujemo vaše podatke trećim stranama u marketinške svrhe.</p>
+
+  <h2>5. Vaša prava</h2>
+  <p>Imate pravo zatražiti pristup, ispravak ili brisanje svojih osobnih podataka u bilo kojem trenutku, kontaktiranjem našeg tima za podršku.</p>
+
+  <h2>6. Kolačići</h2>
+  <p>Stranica može koristiti kolačiće radi poboljšanja korisničkog iskustva i analize prometa.</p>
+
+  <h2>7. Izmjene politike</h2>
+  <p>Ova politika može se povremeno ažurirati. Preporučujemo periodičnu provjeru ove stranice.</p>
+
+  <footer>
+    <nav>
+      <a href="politika-privatnosti.html">Politika privatnosti</a>
+      <a href="uvjeti-koristenja.html">Uvjeti korištenja</a>
+      <a href="dostava-i-povrat.html">Dostava i povrat</a>
+      <a href="placanje-pouzecem.html">Plaćanje pouzećem</a>
+    </nav>
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> MetaSlim Hrvatska. Sva prava pridržana.</p>
+  </footer>
+</body>
+</html>
